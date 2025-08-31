@@ -1,0 +1,193 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0; padding: 0;
+  background: #f5f5f5;
+  color: #333;
+}
+
+.tabs {
+  display: flex;
+  background: #333;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.tab {
+  flex: 1;
+  padding: 14px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  background: #333;
+}
+
+.tab.active, .tab:hover {
+  background: #555;
+}
+
+main {
+  padding: 20px;
+}
+
+.section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+/* Table styling */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.table th, .table td {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.table thead {
+  background: #4CAF50;
+  color: white;
+  font-weight: bold;
+}
+
+.table tbody tr:nth-child(even) {
+  background: #f2f2f2;
+}
+
+.table tbody tr:hover {
+  background: #e6f7ff;
+}
+.table td:first-child,
+.table th:first-child {
+  width: 180px;   /* or whatever fixed width you want */
+  max-width: 180px;
+  word-wrap: break-word;  /* break long text to next line */
+}
+.table th, .table td {
+  padding: 6px 8px;       /* smaller padding for compact rows */
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  white-space: normal;     /* allow text to wrap */
+}
+
+/* Number input */
+input[type="number"] {
+  width: 60px;
+  padding: 4px 6px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+input[type="number"]:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.task-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  transform: scale(1.2);   /* smaller scale */
+  margin: 2px;             /* smaller margin */
+  accent-color: #4CAF50;
+  transition: transform 0.1s;
+}
+
+
+.task-checkbox:hover {
+  transform: scale(1.5);
+}
+
+/* Progress bar (reuse for subject completion) */
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #4CAF50;
+  width: 0%;
+  transition: width 0.4s ease;
+  border-radius: 10px 0 0 10px;
+}
+
+/* Section headings */
+.section h2, .section h3 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.section p {
+  font-size: 14px;
+  color: #555;
+  margin-top: 4px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 5px 0;
+}
+.progress-fill {
+  height: 100%;
+  background: #4caf50;
+  transition: width 0.3s ease;
+}
+
+.chapters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.chapter-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transition: width 0.4s ease;
+  z-index: 0; /* behind text */
+}
+
+.chapter-box {
+  flex: 0 0 220px;        /* fixed width */
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  height: 50px;           /* reduced from 80px */
+  background: #fff;
+  display: flex;
+  align-items: center;    /* vertically center text */
+  justify-content: center;/* horizontally center text */
+  padding: 0 10px;        /* equal left/right padding */
+  box-sizing: border-box; /* include padding in height */
+}
+
+.chapter-content {
+  text-align: center;
+  position: relative;
+  z-index: 1;  /* always on top of the fill */
+}
