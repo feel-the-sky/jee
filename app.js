@@ -105,18 +105,18 @@ async function renderSubject(subject, push = true) {
       <thead>
         <tr>
           <th>Chapter</th>
-          <th>Priority</th>
           ${taskKeys.map(k => `<th>${k}</th>`).join("")}
+          <th>Priority</th>
         </tr>
       </thead>
       <tbody>
         ${chapters.map(ch => `
           <tr data-chapter-id="${ch.id}">
             <td>${ch.name}</td>
-            <td><input type="number" min="1" max="10" value="${ch.priority}" class="priority-input"></td>
             ${taskKeys.map(t => `
               <td><input type="checkbox" class="task-checkbox" data-task="${t}" ${ch.tasks?.[t] ? "checked" : ""}></td>
             `).join("")}
+            <td><input type="number" min="1" max="10" value="${ch.priority}" class="priority-input"></td>
           </tr>
         `).join("")}
       </tbody>
@@ -191,6 +191,11 @@ function setActiveTab(view) {
 // Click handler
 tabs.forEach(tab => {
   tab.addEventListener("click", () => {
+
+    if (window.innerWidth <= 768) {
+      tabsContainer.classList.remove("show");
+    }
+
     const view = tab.dataset.tab;
     setActiveTab(view);
 
@@ -200,6 +205,13 @@ tabs.forEach(tab => {
     // Load the tab content
     loadTab(view);
   });
+});
+
+const menuToggle = document.getElementById("menu-toggle");
+const tabsContainer = document.querySelector(".tabs");
+
+menuToggle.addEventListener("click", () => {
+  tabsContainer.classList.toggle("show");
 });
 
 // On page load: read ?subject=... or default to 'home'
