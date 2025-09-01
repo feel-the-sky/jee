@@ -22,16 +22,22 @@ async function renderHome(push = true) {
   const subjects = ["physics", "chemistry", "math"];
   const allChapters = await Promise.all(subjects.map(s => getChapters(s))); // fetch all in parallel
 
-  // Compute total & done in one pass
-  let totalTasks = 0, doneTasks = 0;
+  let totalWeight = 0, doneWeight = 0;
+
   allChapters.forEach(chapters => {
     chapters.forEach(ch => {
-      const taskKeys = Object.keys(ch.tasks || {});
-      totalTasks += taskKeys.length;
-      doneTasks += Object.values(ch.tasks || {}).filter(Boolean).length;
+      const tasks = ch.tasks || {};
+      const weight = ch.priority || 1; // use priority as weight (default = 1)
+
+      const taskCount = Object.keys(tasks).length;
+      const doneCount = Object.values(tasks).filter(Boolean).length;
+
+      totalWeight += taskCount * weight;
+      doneWeight += doneCount * weight;
     });
   });
-  const overallPct = totalTasks ? ((doneTasks / totalTasks) * 100).toFixed(1) : 0;
+
+  const overallPct = totalWeight ? ((doneWeight / totalWeight) * 100).toFixed(1) : 0;
 
   // Build HTML
   const html = `
@@ -125,16 +131,26 @@ async function renderSubject(subject, push = true) {
 
   content.innerHTML = html;
 
-  // 🔹 Helper to compute and update progress bar
   function updateProgress() {
-    const totalTasks = chapters.reduce((sum, ch) => sum + (Object.keys(ch.tasks || {}).length), 0);
-    const doneTasks = chapters.reduce((sum, ch) => sum + Object.values(ch.tasks || {}).filter(Boolean).length, 0);
-    const pct = totalTasks ? ((doneTasks / totalTasks) * 100).toFixed(1) : 0;
+    let totalWeight = 0;
+    let doneWeight = 0;
+
+    chapters.forEach((ch) => {
+      const tasks = ch.tasks || {};
+      const weight = ch.priority || 1; // priority itself is the weight (default 1)
+
+      const taskCount = Object.keys(tasks).length;
+      const doneCount = Object.values(tasks).filter(Boolean).length;
+
+      totalWeight += taskCount * weight;
+      doneWeight += doneCount * weight;
+    });
+
+    const pct = totalWeight ? ((doneWeight / totalWeight) * 100).toFixed(1) : 0;
 
     document.querySelector(".progress-fill").style.width = `${pct}%`;
     document.querySelector(".section p").textContent = `${pct}% completed`;
   }
-
   // 🔹 Initial progress update
   updateProgress();
 
