@@ -3,7 +3,14 @@ import { getChapters, updateChapter } from "./firebase.js";
 
 const tabs = document.querySelectorAll(".tab");
 const content = document.getElementById("tab-content");
-
+const taskWeights = {
+  ex1: 0.8,
+  ex2: 0.8,
+  ex3: 0.8,
+  ex4a: 1,
+  ex4b: 1.2,
+  ex5: 1.4,
+};
 
 
 // Priority classification
@@ -23,17 +30,18 @@ async function renderHome(push = true) {
   const allChapters = await Promise.all(subjects.map(s => getChapters(s))); // fetch all in parallel
 
   let totalWeight = 0, doneWeight = 0;
-
   allChapters.forEach(chapters => {
     chapters.forEach(ch => {
       const tasks = ch.tasks || {};
-      const weight = ch.priority || 1; // use priority as weight (default = 1)
+      const chapterWeight = ch.priority || 1;
 
-      const taskCount = Object.keys(tasks).length;
-      const doneCount = Object.values(tasks).filter(Boolean).length;
+      Object.entries(tasks).forEach(([taskName, isDone]) => {
+        const taskWeight = taskWeights[taskName] || 1; // fallback if missing
+        const effectiveWeight = chapterWeight * taskWeight;
 
-      totalWeight += taskCount * weight;
-      doneWeight += doneCount * weight;
+        totalWeight += effectiveWeight;
+        if (isDone) doneWeight += effectiveWeight;
+      });
     });
   });
 
@@ -132,18 +140,23 @@ async function renderSubject(subject, push = true) {
   content.innerHTML = html;
 
   function updateProgress() {
+    // exercise-specific weights
+    
+
     let totalWeight = 0;
     let doneWeight = 0;
 
     chapters.forEach((ch) => {
       const tasks = ch.tasks || {};
-      const weight = ch.priority || 1; // priority itself is the weight (default 1)
+      const chapterWeight = ch.priority || 1;
 
-      const taskCount = Object.keys(tasks).length;
-      const doneCount = Object.values(tasks).filter(Boolean).length;
+      Object.entries(tasks).forEach(([taskName, isDone]) => {
+        const taskWeight = taskWeights[taskName] || 1; // fallback if missing
+        const effectiveWeight = chapterWeight * taskWeight;
 
-      totalWeight += taskCount * weight;
-      doneWeight += doneCount * weight;
+        totalWeight += effectiveWeight;
+        if (isDone) doneWeight += effectiveWeight;
+      });
     });
 
     const pct = totalWeight ? ((doneWeight / totalWeight) * 100).toFixed(1) : 0;
