@@ -46,6 +46,8 @@ async function renderHome(push = true) {
   });
 
   const overallPct = totalWeight ? ((doneWeight / totalWeight) * 100).toFixed(1) : 0;
+  const start = new Date("2025-09-01"), end = new Date("2025-12-30"), now = new Date();
+  const timePct = now < start ? 0 : now > end ? 100 : (((now - start) / (end - start)) * 100).toFixed(1);
 
   // Build HTML
   const html = `
@@ -55,6 +57,11 @@ async function renderHome(push = true) {
         <div class="progress-fill" style="width:${overallPct}%"></div>
       </div>
       <p>${overallPct}% completed</p>
+    </div>
+    <div class="section">
+      <h2>Time Progress</h2>
+      <div class="progress-bar"><div class="progress-fill" style="width:${timePct}%;background:steelblue"></div></div>
+      <p>${timePct}% of time elapsed (1 Sept – 30 Dec)</p>
     </div>
     ${subjects.map((s, i) => {
       const chapters = allChapters[i];
